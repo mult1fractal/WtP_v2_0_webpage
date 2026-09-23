@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What the Phage v2.0 - Scalable phage identification &amp; characterization</title>
+    <meta name="description"
+        content="What the Phage (WtP) v2.0 is a scalable Nextflow workflow for the identification and comprehensive characterization of phage sequences - from raw contigs to one interactive report.">
+    <meta property="og:title" content="What the Phage v2.0">
+    <meta property="og:description"
+        content="One command, 16 identification tools, full characterization - identify, annotate, classify, and predict host &amp; lifecycle of your phages.">
+    <link rel="icon" type="image/png" href="assets/img/logo-wtp_small.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAV ================= -->
+    <nav class="nav" id="nav">
+        <div class="container nav-inner">
+            <a href="#top" class="nav-logo">
+                <img src="assets/img/logo-wtp_small.png" alt="What the Phage logo">
+                What the Phage
+                <span class="ver">v2.0</span>
+            </a>
+            <div class="nav-links" id="nav-links">
+                <a href="#pipeline">Pipeline</a>
+                <a href="#tools">Tools</a>
+                <a href="#features">Features</a>
+                <a href="#installation">Installation</a>
+                <a href="#run">Run it</a>
+                <a href="#options">Options</a>
+                <a href="#demo">Live demo</a>
+                <a href="#publication">Publication</a>
+            </div>
+            <div class="nav-cta">
+                <a class="btn btn-sm btn-ghost" href="https://github.com/replikation/What_the_Phage" target="_blank"
+                    rel="noopener">
+                    GitHub
+                </a>
+                <button class="nav-burger" id="nav-burger" aria-label="Toggle menu">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= HERO ================= -->
+    <header class="hero" id="top">
+        <div class="container hero-grid">
+            <div>
+                <div class="hero-badges">
+                    <span>Peer-reviewed · GigaScience 2022</span>
+                    <span>Nextflow DSL2</span>
+                    <span>Docker &amp; Singularity</span>
+                    <span>v2.0 rework</span>
+                </div>
+                <h1>Identify, characterize &amp; <span class="grad">understand</span> your phages in one run.</h1>
+                <p class="lead">
+                    What the Phage (WtP) v2.0 combines <strong>16 established phage-identification tools</strong> with
+                    quality control, annotation, taxonomy, prophage detection, host prediction and lifecycle prediction -
+                    then delivers everything in a single interactive report.
+                </p>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="#demo">Explore a live result</a>
+                    <a class="btn btn-ghost" href="#run">Get started</a>
+                </div>
+                <div class="hero-meta">
+                    <div><strong>16+</strong> identification tools</div>
+                    <div><strong>8</strong> analysis modules</div>
+                    <div><strong>1</strong> command</div>
+                    <div><strong>1</strong> interactive report</div>
+                </div>
+            </div>
+
+            <div class="terminal" aria-hidden="true">
+                <div class="terminal-glow"></div>
+                <div class="terminal-bar">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    <span class="title">What_the_Phage - end-to-end run</span>
+                </div>
+                <div class="terminal-body">
+                    <span class="cmt"># one command, full characterization</span><br>
+                    <span class="prompt">$</span> nextflow run phage.nf \<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="flag">--fasta</span> <span class="cmd">'contigs/*.fasta'</span> \<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="flag">--end_to_end</span> \<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="flag">--cores</span> <span class="cmd">16</span> \<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="flag">-profile</span> <span class="cmd">local,docker</span><br><br>
+                    <span class="ok">[WtP]</span> Run complete - open your interactive report and explore your phages.
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= STATS ================= -->
+    <section class="stats">
+        <div class="container stats-grid">
+            <div class="stat"><div class="num" data-count="16">0</div><div class="label">Phage-ID tools</div></div>
+            <div class="stat"><div class="num" data-count="8">0</div><div class="label">Analysis modules</div></div>
+            <div class="stat"><div class="num" data-count="4">0</div><div class="label">Taxonomy tools</div></div>
+            <div class="stat"><div class="num" data-count="1">0</div><div class="label">Command to run it all</div></div>
+        </div>
+    </section>
+
+    <!-- ================= PIPELINE ================= -->
+    <section class="section" id="pipeline">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Pipeline</span>
+                <h2>From contigs to characterization - automatically</h2>
+                <p>Every module is an independent Nextflow workflow. Run them together with <span
+                        class="mono">--end_to_end</span>, or invoke only the steps you need.</p>
+            </div>
+
+            <div class="vflow reveal">
+                <div class="vflow-node primary">
+                    <h3>FASTA input</h3>
+                    <p>.fa / .fasta / .fna / .gz contigs</p>
+                </div>
+
+                <div class="vflow-arrow"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
+
+                <div class="vflow-node">
+                    <h3>Input validation</h3>
+                    <p>Header sanitizing + length filter (default 1500 bp)</p>
+                </div>
+
+                <div class="vflow-arrow"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
+
+                <div class="vflow-bus"></div>
+
+                <div class="vflow-grid">
+                                        <div class="vflow-mod">
+                        <div class="idx">1</div>
+                        
+                        <h3>Identification</h3>
+                        <p>16 tools, normalized viral scores</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">2</div>
+                        
+                        <h3>Quality control</h3>
+                        <p>CheckV completeness &amp; contamination</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">3</div>
+                        <h3>Annotation</h3>
+                        <p>Prodigal &middot; Pharokka &middot; GeNomad &middot; PhaBox2</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">4</div>
+                        <h3>Taxonomy</h3>
+                        <p>Sourmash &middot; GeNomad &middot; PhaGCN &middot; tax my phage</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">5</div>
+                        <h3>Prophage detection</h3>
+                        <p>GeNomad &middot; PhaBox2 &middot; VirSorter2 &middot; Phigaro</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">6</div>
+                        <h3>Host prediction</h3>
+                        <p>iPHoP &middot; CHERRY</p>
+                    </div>
+                                        <div class="vflow-mod">
+                        <div class="idx">7</div>
+                        <h3>Lifecycle</h3>
+                        <p>BACPHLIP &middot; PhaTYP &middot; consensus</p>
+                    </div>
+                </div>
+
+                <div class="vflow-arrow"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
+
+                <div class="flow-report">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <div>
+                        <h3>Interactive report</h3>
+                        <p>One self-contained HTML report with tabs, genome viewer, per-sample JSON and more.</p>
+                    </div>
+                </div>
+
+                <div class="vflow-note">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    All 7 modules run in parallel on the validated input.
+                </div>
+            </div>
+
+            <div class="pipe-note reveal">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Run everything with <code>--end_to_end</code>, or pick modules: <code>--identify</code>
+                <code>--annotation</code> <code>--taxonomy</code> <code>--prophage</code> <code>--host</code>
+                <code>--lifecycle</code>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TOOLS ================= -->
+    <section class="section section-alt" id="tools">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Tools</span>
+                <h2>18+ established tools, orchestrated for you</h2>
+                <p>WtP wraps, runs and filters a panel of established phage tools so you get clean, comparable
+                    results.</p>
+            </div>
+
+            <div class="reveal">
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                        <div>
+                            <h3>Phage identification</h3>
+                            <div class="tagline">16 prediction modes - scores normalized 0-1 and combined per contig</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/jessieren/DeepVirFinder" target="_blank" rel="noopener">DeepVirFinder<span class="tip">deep-learning k-mer classifier</span></a>
+                        <a class="tool-chip" href="https://github.com/vanessajurtz/MetaPhinder" target="_blank" rel="noopener">MetaPhinder<span class="tip">BLAST vs. phage reference genomes</span></a>
+                        <a class="tool-chip" href="https://github.com/zhenchengfang/PPR-Meta" target="_blank" rel="noopener">PPR-Meta<span class="tip">phage / plasmid / chromosome classifier</span></a>
+                        <a class="tool-chip" href="https://github.com/gussow/seeker" target="_blank" rel="noopener">Seeker<span class="tip">alignment-free deep-learning classifier</span></a>
+                        <a class="tool-chip" href="https://github.com/sourmash-bio/sourmash" target="_blank" rel="noopener">Sourmash<span class="tip">minhash vs. ~4,700 RefSeq phages</span></a>
+                        <a class="tool-chip" href="https://github.com/AnantharamanLab/VIBRANT" target="_blank" rel="noopener">VIBRANT<span class="tip">viral hallmark genes + AMGs</span></a>
+                        <a class="tool-chip" href="https://github.com/jessieren/VirFinder" target="_blank" rel="noopener">VirFinder<span class="tip">k-mer LASSO classifier</span></a>
+                        <a class="tool-chip" href="https://github.com/alyosama/virnet" target="_blank" rel="noopener">VirNet<span class="tip">deep attention model</span></a>
+                        <a class="tool-chip" href="https://github.com/simroux/VirSorter" target="_blank" rel="noopener">VirSorter<span class="tip">reference + ab initio viral signal</span></a>
+                        <a class="tool-chip" href="https://github.com/jiarong/VirSorter2" target="_blank" rel="noopener">VirSorter2<span class="tip">multi-class gradient-boosting</span></a>
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - PhaMer<span class="tip">protein-language-model classifier</span></a>
+                        <a class="tool-chip" href="https://github.com/bobeobibo/phigaro" target="_blank" rel="noopener">Phigaro<span class="tip">orf-aware prophage prediction</span></a>
+                        <a class="tool-chip" href="https://github.com/AnantharamanLab/VIBRANT" target="_blank" rel="noopener">VIBRANT virome<span class="tip">virome-optimized mode</span></a>
+                        <a class="tool-chip" href="https://github.com/simroux/VirSorter" target="_blank" rel="noopener">VirSorter virome<span class="tip">virome-optimized mode</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                        <div>
+                            <h3>Quality control</h3>
+                            <div class="tagline">Viral genome completeness &amp; contamination</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://bitbucket.org/berkeleylab/checkv" target="_blank" rel="noopener">CheckV<span class="tip">completeness, contamination, quality, provirus flag</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></div>
+                        <div>
+                            <h3>Annotation <span class="badge-new">new</span></h3>
+                            <div class="tagline">Gene prediction + function assignment</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/hyattpd/Prodigal" target="_blank" rel="noopener">Prodigal + pVOG<span class="tip">gene prediction + HMMER profile search</span></a>
+                        <a class="tool-chip" href="https://github.com/gbouras13/pharokka" target="_blank" rel="noopener">Pharokka<span class="tip">rapid phage genome annotation (GFF)</span></a>
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - PhaVIP<span class="tip">ORF annotation with pident</span></a>
+                        <a class="tool-chip" href="https://github.com/apcamargo/genomad" target="_blank" rel="noopener">GeNomad annotate<span class="tip">viral gene annotation</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 015 12V7a4 4 0 014-4z"></path></svg></div>
+                        <div>
+                            <h3>Taxonomy <span class="badge-new">new</span></h3>
+                            <div class="tagline">Four independent classifiers, merged into one overview</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/sourmash-bio/sourmash" target="_blank" rel="noopener">Sourmash<span class="tip">NCBI RefSeq or PhageScope (~800k) DB</span></a>
+                        <a class="tool-chip" href="https://github.com/apcamargo/genomad" target="_blank" rel="noopener">GeNomad<span class="tip">ICTV-style lineage assignment</span></a>
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - PhaGCN<span class="tip">deep-learning taxonomic classification</span></a>
+                        <a class="tool-chip" href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">tax my phage<span class="tip">curated ICTV taxonomy to species level</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h2m4 0h2m-9 4h12a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 01-2 2zm2 0v2a2 2 0 002 2h9"></path></svg></div>
+                        <div>
+                            <h3>Prophage detection <span class="badge-new">new</span></h3>
+                            <div class="tagline">Find integrated proviruses in bacterial genomes</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/apcamargo/genomad" target="_blank" rel="noopener">GeNomad find-proviruses<span class="tip">provirus FASTA + TSV</span></a>
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - contamination<span class="tip">candidate &amp; predicted proviruses</span></a>
+                        <a class="tool-chip" href="https://github.com/jiarong/VirSorter2" target="_blank" rel="noopener">VirSorter2<span class="tip">provirus-aware scoring</span></a>
+                        <a class="tool-chip" href="https://github.com/bobeobibo/phigaro" target="_blank" rel="noopener">Phigaro<span class="tip">prophage annotation + interactive HTML</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm4-2a4 4 0 10-4-4"></path></svg></div>
+                        <div>
+<h3>Host prediction <span class="badge-new">new</span></h3>
+                            <div class="tagline">Which bacterium does the phage infect?</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - CHERRY<span class="tip">AAI + CRISPR-based host prediction</span></a>
+                        <a class="tool-chip" href="https://bitbucket.org/srouxjgi/iphop" target="_blank" rel="noopener">iPHoP<span class="tip">optional, June-2025 iPHoP database</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                        <div>
+                            <h3>Lifecycle prediction <span class="badge-new">new</span></h3>
+                            <div class="tagline">Virulent or temperate - with a consensus call</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/adamhockenberry/bacphlip" target="_blank" rel="noopener">BACPHLIP<span class="tip">HMM-based lifecycle probabilities</span></a>
+                        <a class="tool-chip" href="https://github.com/KennthShang/PhaBOX" target="_blank" rel="noopener">PhaBox2 - PhaTYP<span class="tip">virulent / temperate + score</span></a>
+                        <a class="tool-chip" href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">Consensus<span class="tip">combined call, flags disagreements</span></a>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <div class="tool-group-head">
+                        <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                        <div>
+                            <h3>Phage-therapy safety <span class="badge-dev">in development</span></h3>
+                            <div class="tagline">Screening for genes of concern before therapy use</div>
+                        </div>
+                    </div>
+                    <div class="tool-chips">
+                        <a class="tool-chip" href="https://github.com/tseemann/abricate" target="_blank" rel="noopener">Abricate<span class="tip">AMR / virulence / toxin gene screening</span></a>
+                        <a class="tool-chip" href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">Phage ID<span class="tip">single-phage identity characterization report</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="tools-note reveal">
+                <span class="pill">Click any tool to visit its repository</span>
+                <span class="pill">Raw tool outputs archived for transparency</span>
+                <span class="pill">Per-contig x per-tool agreement matrix included</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Features</span>
+                <h2>Built for wet labs, bioinformaticians &amp; phage therapy</h2>
+                <p>Reproducible, containerized and scaleable - from a laptop to a compute cluster or the cloud.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                    <h3>One command, full stack</h3>
+                    <p><span class="mono">--end_to_end</span> chains every module automatically: identify, QC, annotate,
+                        classify, detect prophages, predict host and lifecycle.</p>
+                </div>
+
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a2 2 0 012-2 2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2zm7 0a2 2 0 012-2 2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2zm7 0a2 2 0 012-2 2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2z"></path></svg></div>
+                    <h3>Modular by design</h3>
+                    <p>Independent workflow flags let you run only what you need:</p>
+                    <ul>
+                        <li><span class="mono">--identify</span> · <span class="mono">--annotation</span></li>
+                        <li><span class="mono">--taxonomy</span> · <span class="mono">--prophage</span></li>
+                        <li><span class="mono">--host</span> · <span class="mono">--lifecycle</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg></div>
+                    <h3>Databases, automatic</h3>
+                    <p>Reference databases auto-download on first run and are available for subsequent runs - they don't
+                        need to be downloaded every time.</p>
+                </div>
+
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+                    <h3>Interactive HTML report</h3>
+                    <p>Overview, quality, identification, annotation genome viewer (linear &amp; circular), taxonomy,
+                        prophage and lifecycle - plus per-sample JSON for downstream use.</p>
+                </div>
+
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <h3>Scales: laptop → HPC → cloud</h3>
+                    <p>Profiles for <span class="mono">local</span>, <span class="mono">slurm</span>,
+                        <span class="mono">lsf</span>, <span class="mono">ebi</span> and Google Batch, with
+                        <span class="mono">docker</span> or <span class="mono">singularity</span> engines.</p>
+                </div>
+
+                <div class="feature reveal">
+                    <div class="icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div>
+                    <h3>Reproducible</h3>
+                    <p>Containerized tools, pinned Nextflow and CI-tested stub profiles make every run reproducible and
+                        fast to test.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= INSTALLATION ================= -->
+    <section class="section" id="installation">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Installation</span>
+                <h2>Up and running in a few commands</h2>
+                <p>WtP requires Java, Nextflow and a container engine (Docker or Singularity). This is the Ubuntu
+                    quick-start path.</p>
+            </div>
+
+            <div class="reveal">
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>Install Java and Nextflow</span>
+                        <button class="copy-btn" data-copy="sudo apt-get update
+sudo apt install -y default-jre
+curl -s https://get.nextflow.io | bash
+sudo mv nextflow /usr/bin/">Copy</button>
+                    </div>
+<pre><span class="cmt"># install java and nextflow</span>
+sudo apt-get update
+sudo apt install -y default-jre
+curl -s https://get.nextflow.io | bash
+sudo mv nextflow /usr/bin/</pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l7 18 7-18M5 3h14M5 3l3 10h8l3-10"></path></svg>Install Docker Engine</span>
+                        <button class="copy-btn" data-copy="sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo tee /etc/apt/sources.list.d/docker.sources &lt;&lt;EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo &quot;${UBUNTU_CODENAME:-$VERSION_CODENAME}&quot;)
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -a -G docker $USER">Copy</button>
+                    </div>
+<pre><span class="cmt"># Add Docker's official GPG key:</span>
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+<span class="cmt"># Add the repository to Apt sources:</span>
+sudo tee /etc/apt/sources.list.d/docker.sources &lt;&lt;EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release &amp;&amp; echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo usermod -a -G docker $USER</pre>
+                </div>
+
+                <div class="pipe-note reveal">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Restart your computer so the Docker group membership takes effect, then run a quick testrun:
+                </div>
+
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>Test run</span>
+                        <button class="copy-btn" data-copy="nextflow run replikation/What_the_Phage -r v2.0 --cores 8 -profile smalltest,local,docker">Copy</button>
+                    </div>
+<pre>nextflow run replikation/What_the_Phage -r v2.0 --cores 8 -profile smalltest,local,docker</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= HOW TO RUN ================= -->
+    <section class="section section-alt" id="run">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">How to run</span>
+                <h2>Three commands cover the spectrum</h2>
+                <p>Requires Nextflow and a container engine. Databases auto-download on first run. Add
+                    <span class="mono">-resume</span> to cache completed steps.</p>
+            </div>
+
+            <div class="reveal">
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>End-to-end on a laptop</span>
+                        <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --end_to_end --cores 16 --output results -profile local,docker">Copy</button>
+                    </div>
+<pre><span class="cmt"># full characterization: identify + QC + annotate + taxonomy + prophage + host + lifecycle</span>
+nextflow run phage.nf \
+    <span class="flag">--fasta</span> 'contigs/*.fasta' \
+    <span class="flag">--end_to_end</span> \
+    <span class="flag">--cores</span> 16 \
+    <span class="flag">--output</span> results \
+    <span class="flag">-profile</span> local,docker</pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>HPC cluster (SLURM / Singularity)</span>
+                        <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --end_to_end --cores 20 --output results -profile slurm,singularity --cachedir /images/singularity_images --databases /databases/WtP_databases/">Copy</button>
+                    </div>
+<pre>nextflow run phage.nf \
+    <span class="flag">--fasta</span> 'contigs/*.fasta' \
+    <span class="flag">--end_to_end</span> --cores 20 \
+    <span class="flag">--output</span> results \
+    <span class="flag">-profile</span> slurm,singularity \
+    <span class="flag">--cachedir</span> /images/singularity_images \
+    <span class="flag">--databases</span> /databases/WtP_databases/</pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-head">
+                        <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>Modular - run only what you need</span>
+                        <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --identify --prophage --output results -profile lsf,singularity">Copy</button>
+                    </div>
+<pre><span class="cmt"># e.g. identification + prophage detection only</span>
+nextflow run phage.nf \
+    <span class="flag">--fasta</span> 'contigs/*.fasta' \
+    <span class="flag">--identify</span> <span class="flag">--prophage</span> \
+    <span class="flag">--output</span> results \
+    <span class="flag">-profile</span> lsf,singularity</pre>
+                </div>
+            </div>
+
+            <div class="run-notes reveal">
+                <div class="run-note">
+                    <h4>Executors</h4>
+                    <p>local · slurm · lsf · ebi · Google Batch (ukj_cloud) · test · stub</p>
+                </div>
+                <div class="run-note">
+                    <h4>Engines</h4>
+                    <p>docker or singularity - always pick one: <span class="mono">-profile EXECUTER,ENGINE</span></p>
+                </div>
+                <div class="run-note">
+                    <h4>Input</h4>
+                    <p>Assembled contigs, <span class="mono">.fa / .fasta / .fna / .gz</span>. Multiple files are
+                        auto-split into per-sample results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= OPTIONS ================= -->
+    <section class="section" id="options">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Tool options</span>
+                <h2>Everything <span class="mono">phage.nf --help</span> knows</h2>
+                <p>The full command-line reference for WtP v2.0. Run <span class="mono">nextflow run phage.nf
+                        --help</span> on any machine to get this list.</p>
+            </div>
+
+            <div class="code-block reveal">
+                <div class="code-head">
+                    <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>phage.nf --help</span>
+                    <button class="copy-btn" data-copy="nextflow run phage.nf --help">Copy</button>
+                </div>
+<pre><span class="cmt"># standard execution</span>
+nextflow run phage.nf <span class="flag">--fasta</span> '*/*.fasta' <span class="flag">--cores</span> 20 \
+    <span class="flag">--end_to_end</span> <span class="flag">--output</span> results <span class="flag">-profile</span> local,docker
+
+<span class="cmt"># modular execution - run only what you need</span>
+nextflow run phage.nf <span class="flag">--fasta</span> '*/*.fasta' <span class="flag">--cores</span> 20 \
+    <span class="flag">--identify</span> <span class="flag">--prophage</span> <span class="flag">--output</span> results <span class="flag">-profile</span> lsf,singularity
+
+<span class="cmt"># input</span>
+<span class="flag">--fasta</span>    assembly file(s), e.g. '*.fasta'
+<span class="flag">--setup</span>   skip analysis, download databases + containers
+
+<span class="cmt"># workflow control</span>
+<span class="flag">--end_to_end</span>  identify + annotate + taxonomy + prophage + host + lifecycle
+<span class="flag">--identify</span>    run phage identification
+<span class="flag">--annotation</span>  run annotation
+<span class="flag">--taxonomy</span>    run taxonomy
+<span class="flag">--prophage</span>    run prophage detection
+<span class="flag">--host</span>        run host prediction
+<span class="flag">--lifecycle</span>   run lifecycle prediction
+
+<span class="cmt"># profiles &amp; engines:  -profile &lt;Executor&gt;,&lt;Engine&gt;</span>
+<span class="flag">executors</span>   local | slurm | lsf | ebi | ukj_cloud
+<span class="flag">engines</span>     docker | singularity
+<span class="flag">smalltest</span>   test environment (~1h):  -profile smalltest,local,docker</pre>
+            </div>
+
+            <div class="opts reveal">
+                <div class="opt-group">
+                    <h4>Input</h4>
+                    <div class="opt-row"><code>--fasta</code><span class="desc">assembly file(s) <span class="def">[required, e.g. '*.fasta']</span></span></div>
+                    <div class="opt-row"><code>--setup</code><span class="desc">skip analysis, download databases + containers</span></div>
+                </div>
+                <div class="opt-group">
+                    <h4>Workflow control</h4>
+                    <div class="opt-row"><code>--end_to_end</code><span class="desc">identification + annotation + taxonomy + prophage + host + lifecycle</span></div>
+                    <div class="opt-row"><code>--identify</code><span class="desc">run phage identification</span></div>
+                    <div class="opt-row"><code>--annotation</code><span class="desc">run annotation</span></div>
+                    <div class="opt-row"><code>--taxonomy</code><span class="desc">run taxonomy</span></div>
+                    <div class="opt-row"><code>--prophage</code><span class="desc">run prophage detection</span></div>
+                    <div class="opt-row"><code>--host</code><span class="desc">run host prediction</span></div>
+                    <div class="opt-row"><code>--lifecycle</code><span class="desc">run lifecycle prediction</span></div>
+                </div>
+                <div class="opt-group">
+                    <h4>General options</h4>
+                    <div class="opt-row"><code>--filter</code><span class="desc">minimum contig size in bp to keep <span class="def">[1500]</span></span></div>
+                    <div class="opt-row"><code>--cores</code><span class="desc">cores per process</span></div>
+                    <div class="opt-row"><code>--max_cores</code><span class="desc">total cores used on the machine</span></div>
+                    <div class="opt-row"><code>--mem</code><span class="desc">memory in GB <span class="def">[12]</span></span></div>
+                    <div class="opt-row"><code>--output</code><span class="desc">name of the results folder <span class="def">[results]</span></span></div>
+                    <div class="opt-row"><code>--all_tools</code><span class="desc">activate all phage prediction tools</span></div>
+                    <div class="opt-row"><code>--iphop</code><span class="desc">enable iPHoP host prediction</span></div>
+                </div>
+                <div class="opt-group">
+                    <h4>Tool controls (deactivate)</h4>
+                    <div class="opt-row"><code>--dv</code><span class="desc">deactivate DeepVirFinder</span></div>
+                    <div class="opt-row"><code>--mp</code><span class="desc">deactivate MetaPhinder</span></div>
+                    <div class="opt-row"><code>--pp</code><span class="desc">deactivate PPR-Meta</span></div>
+                    <div class="opt-row"><code>--sm</code><span class="desc">deactivate Sourmash</span></div>
+                    <div class="opt-row"><code>--vb</code><span class="desc">deactivate VIBRANT</span></div>
+                    <div class="opt-row"><code>--vf</code><span class="desc">deactivate VirFinder</span></div>
+                    <div class="opt-row"><code>--vn</code><span class="desc">deactivate VirNet</span></div>
+                    <div class="opt-row"><code>--vs</code><span class="desc">deactivate VirSorter</span></div>
+                    <div class="opt-row"><code>--ph</code><span class="desc">deactivate Phigaro</span></div>
+                    <div class="opt-row"><code>--vs2</code><span class="desc">deactivate VirSorter2</span></div>
+                    <div class="opt-row"><code>--sk</code><span class="desc">deactivate Seeker</span></div>
+                    <div class="opt-row"><code>--pb2</code><span class="desc">deactivate PhaBox2 - PhaMer</span></div>
+                </div>
+                <div class="opt-group">
+                    <h4>Visualization &amp; databases</h4>
+                    <div class="opt-row"><code>--pharokka</code><span class="desc">activate Pharokka plot</span></div>
+                    <div class="opt-row"><code>--plot_completeness</code><span class="desc">plot contigs with CheckV completeness above this <span class="def">[75.00]</span></span></div>
+                    <div class="opt-row"><code>--phage_scope_tax</code><span class="desc">switch to curated PhageScope DB <span class="def">[~800k sequences]</span></span></div>
+                    <div class="opt-row"><code>--annotation_db</code><span class="desc">path to custom annotation HMM database</span></div>
+                </div>
+                <div class="opt-group">
+                    <h4>System paths</h4>
+                    <div class="opt-row"><code>--databases</code><span class="desc">database download location <span class="def">[nextflow-autodownload-databases]</span></span></div>
+                    <div class="opt-row"><code>--workdir</code><span class="desc">temporary work directory</span></div>
+                    <div class="opt-row"><code>--cachedir</code><span class="desc">singularity cache directory <span class="def">[singularity_images]</span></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= DEMO ================= -->
+    <section class="section" id="demo">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Live demo</span>
+                <h2>See a real result explorer</h2>
+                <p>Three demo datasets are bundled with this site. Browse tabs, switch samples, explore genes.</p>
+            </div>
+
+            <div class="demo-frame reveal">
+                <div class="demo-bar">
+                    <div class="info">
+                        <span class="pulse"></span>
+                        <span>Interactive result explorer - 3 real samples, 7 tabs (overview, quality, identification,
+                            taxonomy, annotation, prophage, lifecycle)</span>
+                    </div>
+                    <div class="demo-cta">
+                        <a class="btn btn-sm btn-outline" href="viewer.html" target="_blank" rel="noopener">Open full
+                            explorer ↗</a>
+                    </div>
+                </div>
+                <iframe src="viewer.html" title="What the Phage v2.0 result explorer" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PUBLICATION ================= -->
+    <section class="section section-alt" id="publication">
+        <div class="container">
+            <div class="section-head center reveal">
+                <span class="eyebrow">Publication</span>
+                <h2>Peer-reviewed &amp; open</h2>
+            </div>
+
+            <div class="pub-card reveal">
+                <div class="journal">Giga<br>Science</div>
+                <div>
+                    <h3>What the Phage: a scalable workflow for the identification and analysis of phage sequences</h3>
+                    <p>M. Marquet, M. Hölzer, M. W. Pletz, A. Viehweger, O. Makarewicz, R. Ehricht, C. Brandt</p>
+                    <p class="authors">Peer-reviewed in GigaScience (2022) · open source under GPL-3.0 · actively
+                        developed with release candidates</p>
+                </div>
+                <a class="doi" href="https://doi.org/10.1093/gigascience/giac110" target="_blank" rel="noopener">doi:10.1093/gigascience/giac110</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="cta-band reveal">
+                <h2>Ready to find out what your phages are?</h2>
+                <p>Clone the repo, run one command, and open the interactive report. Reports, issues and feature
+                    requests are welcome on GitHub.</p>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">View on GitHub</a>
+                    <a class="btn btn-ghost" href="viewer.html" target="_blank" rel="noopener">Open the explorer</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#top" class="nav-logo">
+                        <img src="assets/img/logo-wtp_small.png" alt="What the Phage logo">
+                        What the Phage <span class="ver" style="font-size:11px;font-weight:800;color:var(--accent);background:rgba(255,29,108,.14);padding:3px 8px;border-radius:999px;margin-left:2px;">v2.0</span>
+                    </a>
+                    <p>Scalable Nextflow workflow for phage identification and comprehensive characterization - from
+                        assembled contigs to one interactive report.</p>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">GitHub repository</a></li>
+                        <li><a href="https://github.com/replikation/What_the_Phage/releases" target="_blank" rel="noopener">Releases</a></li>
+                        <li><a href="https://mult1fractal.github.io/wtp-documentation/" target="_blank" rel="noopener">Documentation</a></li>
+                        <li><a href="#demo">Live demo</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Publication</h4>
+                    <ul>
+                        <li><a href="https://doi.org/10.1093/gigascience/giac110" target="_blank" rel="noopener">GigaScience paper</a></li>
+                        <li><a href="https://doi.org/10.1101/2020.07.24.219899" target="_blank" rel="noopener">Preprint (bioRxiv)</a></li>
+                        <li><a href="https://github.com/replikation/What_the_Phage/issues" target="_blank" rel="noopener">Report an issue</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 What the Phage · Mike Marquet · GPL-3.0</span>
+                <span>Built for the <a href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener">WtP v2.0</a> platform</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
