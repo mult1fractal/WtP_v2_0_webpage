@@ -38,6 +38,10 @@
                 <a href="#options">Options</a>
                 <a href="#demo">Live demo</a>
                 <a href="#publication">Publication</a>
+                <a href="https://github.com/replikation/What_the_Phage" target="_blank" rel="noopener"
+                    class="nav-github">
+                    GitHub
+                </a>
             </div>
             <div class="nav-cta">
                 <a class="btn btn-sm btn-ghost" href="https://github.com/replikation/What_the_Phage" target="_blank"
@@ -76,7 +80,7 @@
                 </div>
                 <div class="hero-meta">
                     <div><strong>16+</strong> identification tools</div>
-                    <div><strong>8</strong> analysis modules</div>
+                    <div><strong>7</strong> analysis modules</div>
                     <div><strong>1</strong> command</div>
                     <div><strong>1</strong> interactive report</div>
                 </div>
@@ -105,7 +109,7 @@
     <section class="stats">
         <div class="container stats-grid">
             <div class="stat"><div class="num" data-count="16">0</div><div class="label">Phage-ID tools</div></div>
-            <div class="stat"><div class="num" data-count="8">0</div><div class="label">Analysis modules</div></div>
+            <div class="stat"><div class="num" data-count="7">0</div><div class="label">Analysis modules</div></div>
             <div class="stat"><div class="num" data-count="4">0</div><div class="label">Taxonomy tools</div></div>
             <div class="stat"><div class="num" data-count="1">0</div><div class="label">Command to run it all</div></div>
         </div>
@@ -208,7 +212,7 @@
         <div class="container">
             <div class="section-head center reveal">
                 <span class="eyebrow">Tools</span>
-                <h2>18+ established tools, orchestrated for you</h2>
+                <h2>16+ established tools, orchestrated for you</h2>
                 <p>WtP wraps, runs and filters a panel of established phage tools so you get clean, comparable
                     results.</p>
             </div>
@@ -422,6 +426,78 @@
                     quick-start path.</p>
             </div>
 
+            <div class="req-cards reveal">
+                <div class="req-card">
+                    <h4>Databases · end-to-end</h4>
+                    <p class="req-big">≈ 50 GB</p>
+                    <p class="req-sub">auto-downloaded on first run</p>
+                </div>
+                <div class="req-card">
+                    <h4>Optional add-ons</h4>
+                    <p class="req-big">+≈ 850 GB <span class="req-opt">iPHoP</span></p>
+                    <p class="req-big">+≈ 32 GB <span class="req-opt">PhageScope</span></p>
+                    <p class="req-sub">only with <span class="mono">--iphop</span> / <span class="mono">--phage_scope_tax</span></p>
+                </div>
+                <div class="req-card">
+                    <h4>Test profile <span class="mono">smalltest</span></h4>
+                    <p class="req-big">≈ 1.4 GB</p>
+                    <p class="req-sub">minimal databases, runs in ~1 h</p>
+                </div>
+            </div>
+
+            <div class="req-grid reveal">
+                <div class="req-panel">
+                    <h4>Database sizes per tool</h4>
+                    <table class="req-table">
+                        <thead>
+                            <tr><th>Step</th><th>Database</th><th>Size</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Identification</td><td>VirSorter</td><td>13 GB</td></tr>
+                            <tr><td>Identification</td><td>VirSorter2</td><td>11 GB</td></tr>
+                            <tr><td>Identification</td><td>VIBRANT</td><td>3.3 GB</td></tr>
+                            <tr><td>Identification</td><td>Sourmash (identify)</td><td>~260 MB</td></tr>
+                            <tr><td>Identification</td><td>MetaPhinder</td><td>~300 MB</td></tr>
+                            <tr><td>Identification</td><td>PPR-Meta</td><td>~40 MB</td></tr>
+                            <tr><td>QC · completeness</td><td>CheckV</td><td>5.4 GB</td></tr>
+                            <tr><td>Annotation</td><td>pVog + VOG table</td><td>~1.6 GB</td></tr>
+                            <tr><td>Taxonomy</td><td>Sourmash GTDB</td><td>14 GB</td></tr>
+                            <tr><td>Taxonomy</td><td>geNomad</td><td>800 MB</td></tr>
+                            <tr><td>Taxonomy</td><td>NCBI Taxonomy</td><td>~320 MB</td></tr>
+                            <tr><td>Prophage</td><td>reuses VirSorter2 / geNomad / Phigaro</td><td>—</td></tr>
+                            <tr><td>Host</td><td>PhaBox2</td><td>—</td></tr>
+                            <tr><td>Host <span class="mono">--iphop</span></td><td>iPHoP</td><td>~850 GB</td></tr>
+                            <tr><td>Taxonomy <span class="mono">--phage_scope_tax</span></td><td>PhageScope (~800k sequences)</td><td>~32 GB</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="req-note">Plus container images (several GB, depending on Docker/Singularity).
+                        geNomad peaks at ~20 GB RAM.</p>
+                </div>
+
+                <div class="req-panel">
+                    <h4>Run times · real end-to-end run</h4>
+                    <table class="req-table">
+                        <thead>
+                            <tr><th>Module</th><th>Time</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr class="req-total"><td>Total (8 assemblies, 20 cores)</td><td>≈ 19 h</td></tr>
+                            <tr><td>Identification (16 tools)</td><td>~11.5 h</td></tr>
+                            <tr><td>Prophage detection</td><td>~4.5 h</td></tr>
+                            <tr><td>Taxonomy</td><td>~1 h</td></tr>
+                            <tr><td>Annotation</td><td>~1 h</td></tr>
+                            <tr><td>Lifecycle</td><td>~40 min</td></tr>
+                            <tr><td>CheckV completeness</td><td>~15 min</td></tr>
+                            <tr><td>Host prediction</td><td>~10 min</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="req-note">Measured on 8 clinical assemblies running
+                        <span class="mono">--end_to_end</span> with 20 cores. Slowest single tools per assembly:
+                        VirSorter2 ~29 min, VirSorter ~21 min, VIBRANT ~6 min, Pharokka ~5 min.
+                        Times scale with the number and size of your input assemblies.</p>
+                </div>
+            </div>
+
             <div class="reveal">
                 <div class="code-block">
                     <div class="code-head">
@@ -503,8 +579,9 @@ sudo usermod -a -G docker $USER</pre>
             <div class="section-head center reveal">
                 <span class="eyebrow">How to run</span>
                 <h2>Three commands cover the spectrum</h2>
-                <p>Requires Nextflow and a container engine. Databases auto-download on first run. Add
-                    <span class="mono">-resume</span> to cache completed steps.</p>
+                <p>Requires Nextflow and a container engine. Databases auto-download on first run
+                    (≈ 50 GB for the default end-to-end run). Add <span class="mono">-resume</span> to cache
+                    completed steps.</p>
             </div>
 
             <div class="reveal">

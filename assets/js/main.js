@@ -19,6 +19,18 @@
                 links.classList.remove('open');
             });
         });
+        document.addEventListener('click', function (e) {
+            if (links.classList.contains('open') &&
+                !links.contains(e.target) &&
+                !burger.contains(e.target)) {
+                links.classList.remove('open');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                links.classList.remove('open');
+            }
+        });
     }
 
     /* ---------- Scroll reveal ---------- */
