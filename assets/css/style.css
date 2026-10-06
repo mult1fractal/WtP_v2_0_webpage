@@ -49,6 +49,7 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 84px;
+    overflow-x: clip;
 }
 
 body {
@@ -652,8 +653,9 @@ pre,
 
 .pipe-note {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
+    gap: 8px 14px;
     background: var(--dark);
     color: var(--text-dark-soft);
     border-radius: var(--radius);
