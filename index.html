@@ -559,15 +559,16 @@ sudo usermod -a -G docker $USER</pre>
 
                 <div class="pipe-note reveal">
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    Restart your computer so the Docker group membership takes effect, then run a quick testrun:
+                    Restart your computer so the Docker group takes effect, then run a quick testrun using the stable release (<span class="mono">-r v2.0.0</span>):
                 </div>
 
                 <div class="code-block">
                     <div class="code-head">
                         <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>Test run</span>
-                        <button class="copy-btn" data-copy="nextflow run replikation/What_the_Phage -r v2.0 --cores 8 -profile smalltest,local,docker">Copy</button>
+                        <button class="copy-btn" data-copy="nextflow run replikation/What_the_Phage -r v2.0.0 --cores 8 -profile smalltest,local,docker">Copy</button>
                     </div>
-<pre>nextflow run replikation/What_the_Phage -r v2.0 --cores 8 -profile smalltest,local,docker</pre>
+<pre><span class="cmt"># -r v2.0.0 = stable release version (pinned for reproducibility)</span>
+nextflow run replikation/What_the_Phage -r v2.0.0 --cores 8 -profile smalltest,local,docker</pre>
                 </div>
             </div>
         </div>
@@ -591,6 +592,8 @@ sudo usermod -a -G docker $USER</pre>
                         <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --end_to_end --cores 16 --output results -profile local,docker">Copy</button>
                     </div>
 <pre><span class="cmt"># full characterization: identify + QC + annotate + taxonomy + prophage + host + lifecycle</span>
+<span class="cmt"># phage.nf = newest changes, run inside the cloned What_the_Phage directory (may be unstable)</span>
+<span class="cmt"># or use the stable release from anywhere: nextflow run replikation/What_the_Phage -r v2.0.0 ...</span>
 nextflow run phage.nf \
     <span class="flag">--fasta</span> 'contigs/*.fasta' \
     <span class="flag">--end_to_end</span> \
@@ -604,7 +607,9 @@ nextflow run phage.nf \
                         <span class="name"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>HPC cluster (SLURM / Singularity)</span>
                         <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --end_to_end --cores 20 --output results -profile slurm,singularity --cachedir /images/singularity_images --databases /databases/WtP_databases/">Copy</button>
                     </div>
-<pre>nextflow run phage.nf \
+<pre><span class="cmt"># phage.nf = newest changes, run inside the cloned What_the_Phage directory (may be unstable)</span>
+<span class="cmt"># or use the stable release from anywhere: nextflow run replikation/What_the_Phage -r v2.0.0 ...</span>
+nextflow run phage.nf \
     <span class="flag">--fasta</span> 'contigs/*.fasta' \
     <span class="flag">--end_to_end</span> --cores 20 \
     <span class="flag">--output</span> results \
@@ -619,6 +624,8 @@ nextflow run phage.nf \
                         <button class="copy-btn" data-copy="nextflow run phage.nf --fasta 'contigs/*.fasta' --identify --prophage --output results -profile lsf,singularity">Copy</button>
                     </div>
 <pre><span class="cmt"># e.g. identification + prophage detection only</span>
+<span class="cmt"># phage.nf = newest changes, run inside the cloned What_the_Phage directory (may be unstable)</span>
+<span class="cmt"># or use the stable release from anywhere: nextflow run replikation/What_the_Phage -r v2.0.0 ...</span>
 nextflow run phage.nf \
     <span class="flag">--fasta</span> 'contigs/*.fasta' \
     <span class="flag">--identify</span> <span class="flag">--prophage</span> \
